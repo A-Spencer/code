@@ -1,3 +1,10 @@
+#########################
+# nb09_set_activity.py	#	
+# Alec Spencer		#
+# aspencer18@my.bcit.ca	#
+# February 7, 2018	#
+#########################
+
 import pprint
 
 NEWS_PASSAGE1 = """ Bell Canada is alerting customers after hackers illegally
