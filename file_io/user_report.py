@@ -99,7 +99,7 @@ def gen_user_report(user_account_list, output_file='./user_report.txt'):
                 output.write("\nSupplimentary Groups: ")
                 
 
-
+                grouplist = []
                 for line in parse_groups():
                         
                     # change all colons to commas (just to make all delimiters the same)
@@ -123,8 +123,9 @@ def gen_user_report(user_account_list, output_file='./user_report.txt'):
 
                         # if usernames match, append groupstring with matched group
                         if (entry == pwbuffer[0]):
-                            output.write(line[0] + " ")
+                            grouplist.append(line[0])
 
+                output.write(str(grouplist))
                 output.write("\n\n")
                             
         output.close()
