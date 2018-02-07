@@ -1,3 +1,10 @@
+#########################
+# nb07lists.py		#
+# Alec Spencer		#
+# aspencer18@my.bcit.ca	#
+# February 7, 2018	#
+#########################
+
 NEWS_PASSAGE = """ Bell Canada is alerting customers after hackers illegally
 accessed the information of fewer than 100,000 customers, the telecom giant
 told CBC News.
