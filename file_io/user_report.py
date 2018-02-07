@@ -129,5 +129,9 @@ def gen_user_report(user_account_list, output_file='./user_report.txt'):
                             
         output.close()
 
+def main():
+    gen_user_report(parse_accounts())
 
-gen_user_report(parse_accounts())
+if __name__ == "__main__":
+    # execute only if run as a script
+    main()
