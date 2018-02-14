@@ -70,6 +70,7 @@ def gen_user_report(user_account_list, output_file='./user_report.txt'):
 
     with open (output_file, 'w') as output:
     
+        #for each line in the user account list, which is returned by the parse_accounts function
         for index in range(len(user_account_list)):
             
             # make a buffer to process each line
@@ -115,7 +116,7 @@ def gen_user_report(user_account_list, output_file='./user_report.txt'):
                     # try to match user stripped from /etc/group
                     # to user stripped from /etc/passwd
                     #
-                    # ignore the first 3 elements in each line are not usernames, so we can skip testing them for a match
+                    # the first 3 elements in each line are not usernames, so we can skip testing them for a match
                     for entry in line[3:]:
                         
                         # strip the whitespace off of entry, so it can match with username
