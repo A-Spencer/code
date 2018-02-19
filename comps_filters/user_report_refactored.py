@@ -4,7 +4,7 @@ user_report_refactored.py
 Alec Spencer
 aspencer18@my.bcit.ca
 February 19, 2018
-v0.1
+v0.11
 '''
 
 def split_group_line(line):
@@ -87,7 +87,7 @@ def gen_user_report(user_account_list, output_file='user_report.txt'):
         output file name with default
     Returns: nothing
     This saves the user account list as text file in the specified format to the passed file name.
-    This could be done with a list comprehension but it would be a huge, ugly mess
+    This should be done with a for loop
     ''''''
     with open (output_file, 'w') as output:
     
