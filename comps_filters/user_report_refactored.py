@@ -3,8 +3,8 @@
 user_report_refactored.py
 Alec Spencer
 aspencer18@my.bcit.ca
-February 19, 2018
-v0.11
+February 26, 2018
+v1.0
 '''
 
 def split_group_line(line):
@@ -22,26 +22,18 @@ def parse_groups(file_path='/etc/group'):
     Returns: nested list of field seperated group data
     Use list comprehension with split_group_line to spit out a nicely formatted list with all supplemental users
     '''
-    grouplines = []
-    lines = []
+    grouplist = []
+    
     # open /etc/group for reading
     with open(file_path, 'rt') as groups:   
 
-                #parse file into a list of lists
-  
-        
-        
-        
-        
-        #lines = groups.readlines()
-        
-        
+        lines = groups.readlines()
         #list comprehension that takes each line of /etc/groups,
-        #splits them, then adds them as a list to grouplines list.
-        grouplines = (split_group_line(line) for line in groups.readlines())
+        #splits them, then adds them as a list to grouplist list.
+        grouplist = [split_group_line(line) for line in lines]
                                 
     groups.close()
-    return grouplines
+    return grouplist
 
 def is_user_account(user_data):
     '''
@@ -114,7 +106,7 @@ def gen_user_report(user_account_list, output_file='user_report.txt'):
             output.write("\nShell: " + user[6])
         
             #prints user's groups
-            output.write("Supplimentary Groups: " + str(get_sup_groups(user, parse_groups())))
+            output.write("Supplimentary Groups: " + str(get_sup_groups(user, parse_groups() )[0] ) )
 
     output.close()
     
@@ -122,10 +114,8 @@ def main():
     '''
     this calls the other functions when script is run as directly, producing the desired report
     '''
-    
     gen_user_report(get_user_accounts())
-    #print(get_sup_groups("aspencer:x:1002:1002::/home/aspencer:/bin/bash\n", parse_groups()))
-
+ 
 if __name__ == "__main__":
     # execute only if run as a script
     main()
