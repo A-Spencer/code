@@ -1,0 +1,4 @@
+root:x:0:0:root:/root:/bin/bash
+tcpdump:x:72:72::/:/sbin/nologin
+bigmoocow:x:1000:1000:Big Moo Cow:/home/bigmoocow:/bin/bash
+littlemoocow:x:1001:1001:Little Moo Cow:/home/littlemoocow:/bin/bash
