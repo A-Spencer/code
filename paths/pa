@@ -1,7 +1,7 @@
 #!/usr/bin/python3.6
 
 ###########################
-## pa.py v1.0			 ##
+## pa.py v1.1			 ##
 ## Alec Spencer			 ##
 ## aspencer18@my.bcit.ca ##
 ## March 5, 2018		 ##
@@ -32,6 +32,7 @@ def writeJSON(mydictionary: dict()) -> None:
 def readJSON() -> dict():
 	'''
 	reads 'command_db.json' and returns a JSON object file
+	Technically not needed for this assignment
 	'''
 	with open ('command_db.json', 'rt') as inputfile:
 		jsondict = inputfile.read()
@@ -42,45 +43,13 @@ def readJSON() -> dict():
 def processCMD(cmd: str, mydictionary: dict()) -> None:
 	'''
 	Prints the man pages for a command if it exists in the command dictionary.
-	If not, adds the command to the dictionary
 	'''
 	if (cmd in str(mydictionary.values())):
 		gethelp = subprocess.run(["man", sys.argv[2]], stderr=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
 		print(gethelp.stdout)
 	else:
-		#make a list of paths (dirsectories)
-		paths = os.getenv("PATH")
-		paths = paths.split(":")
-
-		try:
-				
-			for dirs in paths:
-				for filename in os.listdir(dirs):
-					fullname = os.path.join(dirs, filename)
-					if ((filename == cmd) and os.access(fullname, os.X_OK) and os.path.isfile(fullname)):
-						if dirs not in mydictionary:
-							mydictionary[dirs] = [cmd]
-						else:
-							mydictionary[dirs].append(cmd)
-		except:
-			pass
-
-		writeJSON(mydictionary)
-
+		print('command "' + cmd + '" not found.')
 	return
-
-def convert2list(mydictionary: dict()) -> list():
-	'''
-	converts a dictionary to a list
-	'''
-	newlist = list()
-	for key in mydictionary:
-		newlist.append(key + "/")
-		for value in mydictionary[key]:
-			newlist.append(key + "/" + value)
-	
-	return newlist
-
 
 def FillDict() -> dict():
 	'''
@@ -104,34 +73,14 @@ def FillDict() -> dict():
 
 	return mydictionary
 
-def DictLength(mydictionary: dict()) -> int:
-	'''
-	prints the number of values in a dictionary
-	'''
-	total = 0
-	for key in mydictionary:
-		for value in mydictionary[key]:
-			total = total + 1
-
-	return total
-
 def main():
 
 	if (len(sys.argv) != 3):
 		print("Incorrect number of args.  \nSyntax:\n$ python pa.py cmd <command>\n$ python pa.py rep term\n$ python pa.py rep file")
 	else:
 	
-		pathdict = dict()
-	
-		try:
-			#read in existing dictionary from JSON file
-			pathdict = readJSON()
-			
-			#or start with full dictionary
-			#pathdict = FillDict()
-
-		except:
-			pass
+		#Fill dictionary with all available commands in $PATH
+		pathdict = FillDict()
 
 		if sys.argv[1] == 'cmd':
 			processCMD(sys.argv[2], pathdict)
