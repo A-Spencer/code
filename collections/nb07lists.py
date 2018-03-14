@@ -84,6 +84,7 @@ def uniquewords(passage):
     
     #add non-words to new list of valid words
     for word in passage:
+        word = word.lower()
         if word.isalpha():
             if len(word)>1 or word == ("a" or "i"):
                 validwords.append(word)

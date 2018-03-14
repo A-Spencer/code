@@ -188,7 +188,7 @@ word = input("Enter a word: ")
 word = word.lower()
 
 #output how many times that lowercase word appeared in the passage
-print(get_key_value(word, word_freq_dict))
+print("Number of occurances: " + str(get_key_value(word, word_freq_dict)))
 
 ## Bonus
 # create a sorted list from the dictionary using the get_key_value function
@@ -198,7 +198,7 @@ print(get_key_value(word, word_freq_dict))
 # print the five most frequently used words and how often they were used
 sortedlist = makelist(word_freq_dict)
 
-print("\nBonus!")
+print("\nBonus: 5 most common words:")
 for index in range(5):
     print(str(sortedlist[index]))
 
