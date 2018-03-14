@@ -1,4 +1,3 @@
-
 """
 Router List
 ~/nasp_python/code/subprocess_re/router_list.py
@@ -38,7 +37,7 @@ def get_routers(webaddress: str) -> list:
     )
 
     #regex to look for '##  ###.###.###.###', give or take a few digits
-    ipv4_regex = r"\d+  \d+\.\d+\.\d+\.\d+"
+    ipv4_regex = r"\d{1,2}  \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
 
     #finds all instances of the pattern 'ipv4_regex' in the string 'tracerouteproc.stdout'
     #and puts them in the variable 'routers' as a list of strings
@@ -126,8 +125,9 @@ def main():
 
     #iterate through each route, printing the router ip addresses along the way and then adding them to a dictionary
     for url in routestotrace:
-        print("\n" + url)
-        pprint.pprint(get_routers(url))
+        #un-comment to show each individual URL's router list
+        #print("\n" + url)
+        #pprint.pprint(get_routers(url))
         make_dictionary(newdictionary, get_routers(url))
 
     print("\n\n********************\n* Bonus Dictionary *\n********************\n")

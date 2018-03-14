@@ -1,0 +1,148 @@
+#!/usr/bin/python3.6
+
+###########################
+## pa.py v1.0			 ##
+## Alec Spencer			 ##
+## aspencer18@my.bcit.ca ##
+## March 5, 2018		 ##
+###########################
+import argparse
+import sys
+import os
+import subprocess
+import json
+
+parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description="Path Analyzer")
+parser.add_argument("command", help='either "cmd" or "rep"', choices=['cmd', 'rep'])
+parser.add_argument("option", help='if command is "cmd", a bash command.  eg, "pwd".  if command is "rep", "term" to print to the terminal or "file" to save')
+args = parser.parse_args()
+
+
+def writeJSON(mydictionary: dict()) -> None:
+	'''
+	writes a JSON object file to 'command_db.json'
+	'''
+	jsondict = json.dumps(mydictionary)
+	with open ('command_db.json', 'wt') as output:
+		output.write(jsondict)
+	output.close()
+
+
+def readJSON() -> dict():
+	'''
+	reads 'command_db.json' and returns a JSON object file
+	'''
+	with open ('command_db.json', 'rt') as inputfile:
+		jsondict = inputfile.read()
+		return json.loads(jsondict)
+	inputfile.close()
+
+
+def processCMD(cmd: str, mydictionary: dict()) -> None:
+	'''
+	Prints the man pages for a command if it exists in the command dictionary.
+	If not, adds the command to the dictionary
+	'''
+	if (cmd in str(mydictionary.values())):
+		gethelp = subprocess.run(["man", sys.argv[2]], stderr=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
+		print(gethelp.stdout)
+	else:
+		#make a list of paths (dirsectories)
+		paths = os.getenv("PATH")
+		paths = paths.split(":")
+
+		try:
+				
+			for dirs in paths:
+				for filename in os.listdir(dirs):
+					fullname = os.path.join(dirs, filename)
+					if ((filename == cmd) and os.access(fullname, os.X_OK) and os.path.isfile(fullname)):
+						if dirs not in mydictionary:
+							mydictionary[dirs] = [cmd]
+						else:
+							mydictionary[dirs].append(cmd)
+		except:
+			pass
+
+		writeJSON(mydictionary)
+
+	return
+
+def convert2list(mydictionary: dict()) -> list():
+	'''
+	converts a dictionary to a list
+	'''
+	newlist = list()
+	for key in mydictionary:
+		newlist.append(key + "/")
+		for value in mydictionary[key]:
+			newlist.append(key + "/" + value)
+	
+	return newlist
+
+
+def FillDict() -> dict():
+	'''
+	reads all files in path locations and outputs a dictionary in the form of {'path dirsectory': 'filename1', 'filename2', 'etc'}
+	'''
+	#make a list of paths (dirsectories)
+	paths = os.getenv("PATH")
+	paths = paths.split(":")
+
+	mydictionary = dict()
+
+	try:
+		for dirs in paths:
+			for filename in os.listdir(dirs):
+				fullname = os.path.join(dirs, filename)
+				#checks if filename is executable and is a file, not a dirsectory
+				if(os.access(fullname, os.X_OK) and os.path.isfile(fullname)):
+					mydictionary[dirs] = os.listdir(dirs)
+	except:
+		pass
+
+	return mydictionary
+
+def DictLength(mydictionary: dict()) -> int:
+	'''
+	prints the number of values in a dictionary
+	'''
+	total = 0
+	for key in mydictionary:
+		for value in mydictionary[key]:
+			total = total + 1
+
+	return total
+
+def main():
+
+	if (len(sys.argv) != 3):
+		print("Incorrect number of args.  \nSyntax:\n$ python pa.py cmd <command>\n$ python pa.py rep term\n$ python pa.py rep file")
+	else:
+	
+		pathdict = dict()
+	
+		try:
+			#read in existing dictionary from JSON file
+			pathdict = readJSON()
+			
+			#or start with full dictionary
+			#pathdict = FillDict()
+
+		except:
+			pass
+
+		if sys.argv[1] == 'cmd':
+			processCMD(sys.argv[2], pathdict)
+		elif sys.argv[1] == 'rep':
+			if sys.argv[2] == 'term':
+				print(pathdict)
+			elif sys.argv[2] == 'file':
+				writeJSON(pathdict)
+				print('file "command_db.json" saved.')
+
+if __name__ == "__main__":
+    main()
+	
+
